@@ -1,0 +1,17 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: noti
+spec:
+  schedule: "0 3 * * *"
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+          - name: noti
+            image: jaraninb/covid-noti:0.0.1
+            imagePullPolicy: IfNotPresent
+          restartPolicy: OnFailure
+          imagePullSecrets:
+          - name: regcred
