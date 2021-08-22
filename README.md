@@ -1,0 +1,1 @@
+# node-covid-th-notify
