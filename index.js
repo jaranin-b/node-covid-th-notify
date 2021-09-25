@@ -80,41 +80,44 @@ const main = async () => {
   try {
     const { data } = await axios.get(process.env.COVID_DATA_API_URL)
     const slackMessage = getMessage(data)
-    const SlackHookUrls = JSON.parse(process.env.SLACK_WEB_HOOK_URLS)
+    const SlackHookUrls = process.env.SLACK_WEB_HOOK_URLS.split('|')
 
-    console.log(typeof process.env.LINE_GROUP_TOKENS)
-
-    // slack notify
-    SlackHookUrls.forEach(async(url) => {
-      const slackResult = await axios.post(
-        url,
-        JSON.stringify(slackMessage),
-        {
-          headers: {
-            'Content-type': 'application/json',
-          },
-        }
-      )
-      console.log(`SLACK notified done for ${url}, result: `, slackResult.data)
-    })
+    if(SlackHookUrls) {
+      // slack notify
+      SlackHookUrls.forEach(async(url) => {
+        const slackResult = await axios.post(
+          url,
+          JSON.stringify(slackMessage),
+          {
+            headers: {
+              'Content-type': 'application/json',
+            },
+          }
+        )
+        console.log(`SLACK notified done for ${url}, result: `, slackResult.data)
+      })
+    }
 
     // line notify
-    const tokens = JSON.parse(process.env.LINE_GROUP_TOKENS)
+    console.log(typeof process.env.LINE_GROUP_TOKENS)
+    const tokens = process.env.LINE_GROUP_TOKENS.split('|')
 
-    tokens.forEach(async(token) => {
-      const lineMessage = getLineMessage(data)
-      const lineResult = await axios.post(
-        'https://notify-api.line.me/api/notify',
-        queryString.stringify({ message: lineMessage }),
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-            'Content-Type': 'application/x-www-form-urlencoded'
-          },
-        }
-      )
-      console.log(`LINE notified done for ${token}, result: `, lineResult.data)
-    })
+    if(tokens) {
+      tokens.forEach(async(token) => {
+        const lineMessage = getLineMessage(data)
+        const lineResult = await axios.post(
+          'https://notify-api.line.me/api/notify',
+          queryString.stringify({ message: lineMessage }),
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+              'Content-Type': 'application/x-www-form-urlencoded'
+            },
+          }
+        )
+        console.log(`LINE notified done for ${token}, result: `, lineResult.data)
+      })
+    }
   } catch (error) {
     console.log(error)
   }

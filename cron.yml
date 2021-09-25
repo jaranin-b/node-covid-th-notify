@@ -10,8 +10,19 @@ spec:
         spec:
           containers:
           - name: noti
-            image: jaraninb/covid-noti:0.0.1
+            image: jaraninb/covid-noti:0.0.2
             imagePullPolicy: IfNotPresent
+            env:
+            - name: LINE_NOTIFY_URL
+              value: "https://notify-api.line.me/api/notify"
+            - name: LINE_GROUP_TOKENS
+              value: "{LINE_GROUP_TOKENS_1}|{LINE_GROUP_TOKENS_2}"
+            - name: SLACK_WEB_HOOK_URLS
+              value: "{SLACK_WEB_HOOK_URLS_1}|{SLACK_WEB_HOOK_URLS_2}"
+            - name: COVID_DATA_API_URL
+              value: "https://static.easysunday.com/covid-19/getTodayCases.json"
+            - name: COVID_DATA_WEB_REF
+              value: "https://easysunday.com/labs-covid-19"
           restartPolicy: OnFailure
           imagePullSecrets:
           - name: regcred
