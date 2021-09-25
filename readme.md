@@ -27,6 +27,7 @@ npm run start
 ```
 
 ## Sample Slack notification
-
+<img src="https://github.com/jaranin-b/node-covid-th-notify/blob/main/samples/slack-noti.png" width="75%">
 
 ## Sample Line notification
+<img src="https://github.com/jaranin-b/node-covid-th-notify/blob/main/samples/line-noti.jpg" width="60%">
